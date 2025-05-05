@@ -9,14 +9,14 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: {
         name: 'Car Assistant',
-        short_name: 'CarApp',
+        short_name: 'My VW Assistant',
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#317EFB',
         icons: [
           {
-            src: 'icon-192.png',
+            src: 'icon-192.jpg',
             sizes: '192x192',
             type: 'image/png',
           },
