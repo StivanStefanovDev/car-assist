@@ -7,7 +7,7 @@ import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import iconShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import '../styles/SpeechRecognition.css';
 
-// Configure default Leaflet icon paths (removes require() usage)
+// configure default Leaflet marker icons
 L.Icon.Default.mergeOptions({
   iconUrl,
   iconRetinaUrl,
@@ -22,7 +22,7 @@ const SpeechRecognition: React.FC = () => {
   const [stations, setStations] = useState<{ lat: number; lng: number; name: string }[]>([]);
   const recognitionRef = useRef<any>(null);
 
-  // Initialize Web Speech API
+  // 1) Initialize Web Speech API
   useEffect(() => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) {
@@ -60,7 +60,7 @@ const SpeechRecognition: React.FC = () => {
     recognitionRef.current = recog;
   }, [showMap, transcript]);
 
-  // Fetch nearby gas stations via Overpass once coords are set
+  // 2) Fetch nearby gas stations once coords are set
   useEffect(() => {
     if (showMap && coords) {
       const query = `
@@ -87,7 +87,7 @@ const SpeechRecognition: React.FC = () => {
     }
   }, [coords, showMap]);
 
-  // Toggle speech recognition on/off
+  // 3) Toggle speech recognition on/off
   const toggleListening = () => {
     if (!recognitionRef.current) return;
     if (listening) recognitionRef.current.stop();
@@ -114,24 +114,24 @@ const SpeechRecognition: React.FC = () => {
       {showMap && coords && (
         <div className="map-container">
           <MapContainer
-            center={[coords.lat, coords.lng] as L.LatLngExpression}
-            zoom={14}
-            scrollWheelZoom={false}
-            style={{ width: '100%', height: '100%' }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <Marker position={[coords.lat, coords.lng]}>
-              <Popup>Your location</Popup>
-            </Marker>
-            {stations.map((s, idx) => (
-              <Marker key={idx} position={[s.lat, s.lng]}>
-                <Popup>{s.name}</Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+  center={[coords.lat, coords.lng] as [number, number]}
+  zoom={14}
+  scrollWheelZoom={false}
+  style={{ width: '100%', height: '100%' }}
+>
+  <TileLayer
+    attribution='&copy; OpenStreetMap contributors'
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  />
+  <Marker position={[coords.lat, coords.lng]}>
+    <Popup>Your location</Popup>
+  </Marker>
+  {stations.map((s, idx) => (
+    <Marker key={idx} position={[s.lat, s.lng]}>
+      <Popup>{s.name}</Popup>
+    </Marker>
+  ))}
+</MapContainer>
         </div>
       )}
     </div>
