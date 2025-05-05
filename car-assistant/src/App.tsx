@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <HomePage onStartListening={() => console.log('Listening started')} />
+      <HomePage />
     </>
   )
 }
